@@ -1,0 +1,5 @@
+1 outside 60.0 10567
+2 outside 17.0 10466
+3 outside 22.0 10469
+4 outside 17.0 10701
+5 CC 17.0 NR

@@ -1,0 +1,14 @@
+1 0 0 0 0 2 0.0265 outside
+2 0 0 0 0 2 0.0265 outside
+3 0 0 0 0 2 0.0265 outside
+4 0 0 0 0 2 0.0265 outside
+5 0 0 0 0 2 0.0265 outside
+6 0 0 0 0 2 0.0265 outside
+7 0 0 0 0 2 0.0265 outside
+8 0 0 0 0 2 0.0265 outside
+9 0 0 0 0 2 0.0265 outside
+10 0 0 0 0 2 0.0265 outside
+11 0 0 0 0 2 0.0265 outside
+12 0 0 0 0 2 0.0265 outside
+13 0 0 0 0 2 0.0265 outside
+14 0 0 0 0 2 0.0265 outside

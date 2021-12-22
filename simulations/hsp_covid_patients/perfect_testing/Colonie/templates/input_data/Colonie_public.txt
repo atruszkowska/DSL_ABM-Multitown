@@ -1,0 +1,5 @@
+1 outside 32.0 12302
+2 outside 27.0 12188
+3 outside 27.0 12182
+4 outside 60.0 12866
+5 outside 32.0 12065

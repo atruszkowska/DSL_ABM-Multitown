@@ -1,0 +1,9 @@
+*__pyc__*
+*.mat
+*dir_*
+*.zip
+*.png
+slurm*
+*.fig
+*.svg
+
