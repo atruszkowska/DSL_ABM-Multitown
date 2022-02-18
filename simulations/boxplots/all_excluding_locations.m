@@ -23,13 +23,14 @@ pop_U = 59750;
 
 % Directories to consider
 main_data_dirs = {  '../no_work/perfect_testing/Colonie/';...
+                    '../no_transit/perfect_testing/Colonie/';...
                     '../schools_shut/perfect_testing/Colonie/';...
                     '../no_hsp/perfect_testing/Colonie/';...
                     '../no_rh/perfect_testing/Colonie/';...
                     '../no_leisure/perfect_testing/Colonie/'};
 % Boxplot labels
-box_labels = {'Work', 'Schools', 'Hospitals', ...
-                'RH', 'Leisure'};
+box_labels = {'Workplaces', 'Public', 'Schools', 'Hospitals', ...
+                'Retirement', 'Leisure'};
                 
 % Number of datasets
 num_studies = size(main_data_dirs,1);            
@@ -163,7 +164,7 @@ function plot_one_town(labels, data1, data2, data3, colors, ylab, ylims, ifig)
     % ylim(axes1,[0 5]);
     box(axes1,'on');
     % Set the remaining axes properties
-    set(axes1,'FontSize',24,'TickLabelInterpreter','latex','XGrid','on','YGrid',...
+    set(axes1,'FontSize',20,'TickLabelInterpreter','latex','XGrid','on','YGrid',...
         'on'); 
 %      set(axes1,'FontSize',28,'FontName','SanSerif','XGrid','off','YGrid',...
 %         'off'); 
@@ -179,7 +180,7 @@ function plot_one_town(labels, data1, data2, data3, colors, ylab, ylims, ifig)
 %     xticklabels({'0','1e-e3','1e-2','0.1','1','2','3','4','5','6','7', '8', '9', '10'})
 %     ylim(ylimits)
     
-    set(gcf,'Position',[2360 364 889 622])
+    set(gcf,'Position',[2042 233 983 622])
 
 end
 

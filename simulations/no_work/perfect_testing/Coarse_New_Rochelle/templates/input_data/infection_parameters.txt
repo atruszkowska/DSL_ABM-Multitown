@@ -169,12 +169,12 @@
 // leisure reopening rate
 0.1
 // management science art transmission rate
-0.2347
+0.0
 // service occupation transmission rate
-0.3413
+0.0
 // sales office transmission rate
-0.3627
+0.0
 // construction maintenance transmission rate
-0.7253
+0.0
 // production transportation transmission rate
-0.6827
+0.0
