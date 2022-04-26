@@ -499,6 +499,12 @@ public:
 	Testing get_testing_object() const { return testing; }
 	/// Return the Testing object
 	Testing& get_testing_object() { return testing; }
+
+	// Contacts of all agents at this time step
+	void collect_contacts();
+	// Return for saving
+	std::vector<std::vector<int>> get_all_contacts() { return agent_contacts; }
+
 private:
 
 	using type_getter = bool(Agent::*)() const;
@@ -532,6 +538,9 @@ private:
 	std::vector<int> tested_neg_day = {};
 	std::vector<int> tested_false_pos_day = {};
 	std::vector<int> tested_false_neg_day = {};
+
+	// Contacts with time 
+	std::vector<std::vector<int>> agent_contacts;
 
 	// Infection parameters
 	std::map<std::string, double> infection_parameters = {};

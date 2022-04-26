@@ -1505,6 +1505,138 @@ std::vector<int> ABM::get_treatment_data() const
 }
 
 // Calculate the average number of contacts an agent makes
+void ABM::collect_contacts()
+{
+	int n_tot = 0, les_loc = 0, counter = 0;
+	std::vector<int> temp(agents.size(),0);
+	for (const auto& agent : agents){
+		n_tot = 0;
+		// Removed - dead
+		if (agent.removed_dead()) {
+			n_tot = -1;
+			temp.at(counter) = n_tot;
+			++counter;
+			continue;
+		}
+		
+		// Tested (and isolated)
+		if (agent.tested()){
+			if (agent.get_time_of_test() <= time 
+					&& agent.tested_awaiting_test() == true){
+				// Time of test
+				if (agent.tested_in_hospital()) {
+					n_tot += hospitals.at(agent.get_hospital_ID()-1).get_number_of_agents();
+				} else {
+					if (agent.retirement_home_resident()) {
+						n_tot += retirement_homes.at(agent.get_household_ID()-1).get_number_of_agents();
+					} else {
+						n_tot += households.at(agent.get_household_ID()-1).get_number_of_agents();
+					}
+				}
+				temp.at(counter) = n_tot;
+				++counter;
+				continue;
+			}
+			// Waiting for test or the results, home isolated unless an exposed hospital employee
+			// Non-covid hospital patients - just hospital
+			if (!(agent.hospital_employee() && agent.exposed())) {
+				if (agent.retirement_home_resident()) {
+					n_tot += retirement_homes.at(agent.get_household_ID()-1).get_number_of_agents();
+				} else if (agent.hospital_non_covid_patient()) {
+					n_tot += hospitals.at(agent.get_hospital_ID()-1).get_number_of_agents();
+				} else {
+					n_tot += households.at(agent.get_household_ID()-1).get_number_of_agents();
+				}
+				temp.at(counter) = n_tot;
+				++counter;
+				continue;
+			}
+		}
+
+		// Treated
+		if (agent.being_treated()){
+			if (agent.home_isolated()){
+				if (agent.retirement_home_resident()) {
+					n_tot += retirement_homes.at(agent.get_household_ID()-1).get_number_of_agents();
+				} else {
+					n_tot += households.at(agent.get_household_ID()-1).get_number_of_agents();
+				}
+			} else if (agent.hospitalized()){
+				n_tot += hospitals.at(agent.get_hospital_ID()-1).get_number_of_agents();
+			} else {
+				// ICU
+				n_tot += hospitals.at(agent.get_hospital_ID()-1).get_number_of_agents();
+			}
+			temp.at(counter) = n_tot;
+			++counter;
+			continue;
+		}
+
+		if (agent.hospital_employee()) {
+			// This also includes private guests (just don't count them double)
+			n_tot += households.at(agent.get_household_ID()-1).get_number_of_agents();
+			if (agent.student()) {
+				if (time < infection_parameters.at("school closure")) { 
+					n_tot += schools.at(agent.get_school_ID()-1).get_number_of_agents();
+				}
+			}
+			n_tot += hospitals.at(agent.get_hospital_ID()-1).get_number_of_agents();
+		} else if (agent.hospital_non_covid_patient()) {
+			n_tot += hospitals.at(agent.get_hospital_ID()-1).get_number_of_agents();
+		} else {
+			if (agent.retirement_home_resident()) {
+				n_tot += retirement_homes.at(agent.get_household_ID()-1).get_number_of_agents();
+			} else {
+				n_tot += households.at(agent.get_household_ID()-1).get_number_of_agents();
+			}
+
+			if (agent.student()) {
+				if (time < infection_parameters.at("school closure")) {
+					n_tot += schools.at(agent.get_school_ID()-1).get_number_of_agents();
+				}
+			}
+
+			if (agent.works()) {
+				if (agent.retirement_home_employee()) {
+					n_tot += retirement_homes.at(agent.get_work_ID()-1).get_number_of_agents();
+				} else if (agent.school_employee()) {
+					if (time < infection_parameters.at("school closure")) {
+						n_tot += schools.at(agent.get_work_ID()-1).get_number_of_agents();
+					}
+				} else {
+					if (!agent.works_from_home()) {
+						n_tot += workplaces.at(agent.get_work_ID()-1).get_number_of_agents();
+					}
+				}
+			}
+		}
+
+		// Transit
+		if (agent.get_work_travel_mode() == "carpool") {
+			n_tot +=  carpools.at(agent.get_carpool_ID()-1).get_number_of_agents();
+		} else if (agent.get_work_travel_mode() == "public") {
+			n_tot +=  public_transit.at(agent.get_public_transit_ID()-1).get_number_of_agents();
+		}
+
+		// Leisure locations
+		les_loc = agent.get_leisure_ID();	
+		if (les_loc > 0) {
+			if (agent.get_leisure_type() == "public") {
+				n_tot += leisure_locations.at(les_loc - 1).get_number_of_agents();
+			} else {
+				// This is not duplicating because it adds the number of agents 
+				// in the household this agent visited
+				n_tot += households.at(les_loc - 1).get_number_of_agents();
+			}
+		}
+		temp.at(counter) = n_tot;
+		++counter;	
+	}
+	//return (static_cast<double>(n_tot))/(static_cast<double>(agents.size()));
+	agent_contacts.push_back(temp);
+}
+
+// Calculate the average number of contacts an agent makes
 double ABM::get_average_contacts()
 {
 	int n_tot = 0, les_loc = 0;
@@ -1512,7 +1644,7 @@ double ABM::get_average_contacts()
 		if (agent.hospital_employee()) {
 			n_tot += households.at(agent.get_household_ID()-1).get_number_of_agents();
 			
-			if (agent.student()) {
+		if (agent.student()) {
 				if (time < infection_parameters.at("school closure")) { 
 					n_tot += std::min(schools.at(agent.get_school_ID()-1).get_number_of_agents(),
 									static_cast<int>(infection_parameters.at("max contacts at school")));

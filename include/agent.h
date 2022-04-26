@@ -155,6 +155,7 @@ public:
 	bool dying() const { return will_die; }
 	bool recovering() const { return will_recover; }
 	bool removed() const { return is_removed; }
+	bool removed_dead() const { return is_removed_dead; }
 	bool vaccinated() const { return is_vaccinated; }
 
 	/// Get infectiousness variability factor of an agent
@@ -281,6 +282,7 @@ public:
 	void set_dying(const bool val) { will_die = val; }
 	void set_recovering(const bool val) { will_recover = val; }
 	void set_removed(const bool val) { is_removed = val; }
+	void set_removed_dead(const bool val) { is_removed_dead = val; }
 	void set_vaccinated(const bool val) { is_vaccinated = val; }
 	// Treatment - as set for regular
 	void to_be_hospitalized(const bool val) { will_be_hospitalized = val; }
@@ -408,6 +410,7 @@ private:
 	bool will_die = false;
 	bool will_recover = false;
 	bool is_removed = false;
+	bool is_removed_dead = false;
 	bool is_vaccinated = false;
 	bool will_be_hospitalized = false;
 	bool will_be_in_ICU = false;

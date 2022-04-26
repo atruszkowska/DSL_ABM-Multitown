@@ -246,6 +246,7 @@ std::vector<int> HspPatientTransitions::check_agent_removal(Agent& agent, const 
 			removed.at(1) = 1;
 			remove_agent_from_all_places(agent, households, hospitals);
 			states_manager.set_any_to_removed(agent);
+			agent.set_removed_dead(true);
 		}
 	}
 

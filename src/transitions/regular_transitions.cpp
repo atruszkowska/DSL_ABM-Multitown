@@ -452,6 +452,7 @@ std::vector<int> RegularTransitions::check_agent_removal(Agent& agent, const dou
 			remove_agent_from_all_places(agent, households, schools, workplaces, hospitals, 
 							retirement_homes, carpools, public_transit);
 			states_manager.set_any_to_removed(agent);
+			agent.set_removed_dead(true);
 		}
 	}
 	// If recovering

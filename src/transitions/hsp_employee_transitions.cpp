@@ -296,6 +296,7 @@ std::vector<int> HspEmployeeTransitions::check_agent_removal(Agent& agent, const
 			remove_agent_from_all_places(agent, households, schools, hospitals,
 							carpools, public_transit);
 			states_manager.set_any_to_removed(agent);
+			agent.set_removed_dead(true);
 		}
 	}
 	// If recovering
